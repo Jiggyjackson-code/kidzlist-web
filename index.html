@@ -107,7 +107,7 @@
   <div class="sub2">Für Eltern und Kinder gebaut.<br>Ohne Werbung, ohne Tracking.</div>
   <div class="stores">
     <a class="btn store" href="https://apps.apple.com/app/id6780948441" target="_blank" rel="noopener">App Store</a>
-    <a class="btn store" href="#" onclick="return false">▶ Google Play</a>
+    <a class="btn store" href="#" onclick="return false">Google Play</a>
   </div>
   <a class="dslink" href="https://jiggyjackson-code.github.io/kidzlist-recht/" target="_blank" rel="noopener">Datenschutz & Nutzungsbedingungen</a>
 </div></div>
@@ -171,7 +171,7 @@ scene.add(tip);
 const CAM_OFF=new THREE.Vector3(15,17,15);
 function setCurveT(t){t=Math.max(0,Math.min(0.999,t));const p=curve.getPointAt(t);tip.position.set(p.x,2.4,p.z);cam.position.set(p.x+CAM_OFF.x,CAM_OFF.y,p.z+CAM_OFF.z);cam.lookAt(p.x,0,p.z-4);}
 
-const STORES=`<div class="stores"><a class="btn store" href="https://apps.apple.com/app/id6780948441" target="_blank" rel="noopener">App Store</a><a class="btn store" href="#" onclick="return false">▶ Google Play</a></div>`;
+const STORES=`<div class="stores"><a class="btn store" href="https://apps.apple.com/app/id6780948441" target="_blank" rel="noopener">App Store</a><a class="btn store" href="#" onclick="return false">Google Play</a></div>`;
 const LAND=(t,m)=>`<div class="lwrap"><div class="ph" style="background-image:url('${IMG}land/${t}-tag.webp')"></div><div class="ph night" style="background-image:url('${IMG}land/${t}-nacht.webp')"></div></div><h2 style="font-size:1.2rem">${m}</h2>`;
 
 const BEATS=[
