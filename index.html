@@ -40,10 +40,13 @@
   .rt .t.ok .hk{transform:scale(1)}
   .rtwin{min-height:1.15rem;font-weight:700;color:var(--gruen);font-size:.9rem}
   /* Charaktere */
-  .chrow{display:flex;flex-wrap:wrap;gap:.36rem;justify-content:center;max-height:150px;overflow:hidden;margin-top:.55rem}
-  .chrow img{width:2.5rem;height:2.5rem;object-fit:contain;background:#fff;border-radius:50%;padding:.15rem;box-shadow:0 3px 8px rgba(0,0,0,.12);opacity:0;transform:translateX(-26px)}
-  .beat.on .chrow img{animation:rollin .5s forwards}
-  @keyframes rollin{to{opacity:1;transform:none}}
+  .chwrap{margin-top:.65rem;display:flex;flex-direction:column;gap:.55rem;overflow:hidden}
+  .chrow2{display:flex;gap:.55rem;width:max-content}
+  .chrow2 img{width:3.4rem;height:3.4rem;object-fit:contain;background:#fff;border-radius:50%;padding:.2rem;box-shadow:0 3px 8px rgba(0,0,0,.12);flex:none}
+  .chrow2.r{animation:mqr 22s linear infinite}
+  .chrow2.l{animation:mql 22s linear infinite}
+  @keyframes mqr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+  @keyframes mql{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   /* Feature */
   .featrow{display:flex;align-items:center;gap:.7rem;text-align:left}
   .featrow .ic{width:3rem;height:3rem;flex:none;display:grid;place-items:center;background:#f4f6fb;border-radius:50%}
@@ -176,7 +179,7 @@ const LAND=(t,m)=>`<div class="lwrap"><div class="ph" style="background-image:ur
 
 const BEATS=[
  {at:0.00,pos:'mid',html:`<div class="intrologo"><svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg"><text class="kdzwm" text-anchor="middle" x="610" y="270" fill="#1B1B2F">kidzlist</text><text class="kdzwm" text-anchor="middle" x="600" y="260"><tspan fill="#FF3B30">k</tspan><tspan fill="#FF9500">i</tspan><tspan fill="#FFC72C">d</tspan><tspan fill="#2ECF6E">z</tspan><tspan fill="#2D7CF6">l</tspan><tspan fill="#5856D6">i</tspan><tspan fill="#AF52DE">s</tspan><tspan fill="#FF3D77">t</tspan></text></svg></div><p class="sub">Routine für Kinder – Aufgaben mit Belohnung & Spaß</p>${STORES}<div class="weiter">So erlebt Ihr Kind die App – scroll los ⌄</div>`},
- {at:0.075,pos:'mid',html:`<h2>Jedes Kind sein Held</h2><p class="sub">33 gemalte Charaktere – eigene Farbe, eigenes Foto.</p><div class="chrow" id="chrow"></div>`},
+ {at:0.075,pos:'mid',html:`<h2>Jedes Kind sein Held</h2><p class="sub">33 gemalte Charaktere – eigene Farbe, eigenes Foto.</p><div class="chwrap"><div class="chrow2 r" id="chrowA"></div><div class="chrow2 l" id="chrowB"></div></div>`},
  {at:0.15,pos:'left',html:LAND('juni','Juni')+`<p class="sub">Jeder Tag eine kleine Landschaft – Tag und Nacht.</p>`},
  {at:0.225,pos:'right',html:LAND('dez','Dezember')+`<p class="sub">Jeden Monat eine neue Welt zum Sammeln.</p>`},
  {at:0.31,pos:'mid',html:`<h2>Morgenroutine</h2><p class="sub">Tipp die Aufgaben an – ganz allein.</p><div class="rt" id="rtMorgen"></div><div class="rtwin" id="winMorgen"></div>`},
@@ -202,7 +205,7 @@ function fillRoutine(boxId,tasks,winId){const box=document.getElementById(boxId)
     e.onclick=()=>{e.classList.toggle('ok');const n=box.querySelectorAll('.t.ok').length,w=document.getElementById(winId);if(n===tasks.length){w.textContent='Geschafft! 🎉';konf();}else w.textContent='';};box.appendChild(e);});}
 fillRoutine('rtMorgen',MORNING,'winMorgen');fillRoutine('rtAbend',EVENING,'winAbend');
 const CHARS=["unicorn","princess","Fee","mermaid","Drache","Schmetterling","hero","Roboter","ritter","pirat","ninja","samurai","aerztin","astronautin","pilot","polizist","feuerwehr","saengerin"];
-const chrow=document.getElementById('chrow');CHARS.forEach((c,k)=>{const im=document.createElement('img');im.src=IMG+'chars/'+c+'.webp';im.loading='lazy';im.style.animationDelay=(k*0.05)+'s';chrow.appendChild(im);});
+['chrowA','chrowB'].forEach((id,ri)=>{const el=document.getElementById(id);const arr=CHARS.slice(ri*9,ri*9+9);const h=arr.map(c=>`<img src="${IMG}chars/${c}.webp" loading="lazy" alt="">`).join('');el.innerHTML=h+h;});
 
 // ===== Durchgehende Fahrt + Beats + Tag→Nacht + Spiele im Beat =====
 document.getElementById('scroller').style.height='1500vh';
