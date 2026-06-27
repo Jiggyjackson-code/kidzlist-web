@@ -34,7 +34,7 @@
   .rt{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.7rem 0 .2rem}
   .rt .t{display:flex;align-items:center;gap:.5rem;background:#f4f6fb;border:3px solid transparent;border-radius:1rem;padding:.55rem .6rem;cursor:pointer;position:relative;transition:.25s;text-align:left}
   .rt .t img{width:2.3rem;height:2.3rem;object-fit:contain;flex:none}
-  .rt .t .l{font-weight:600;font-size:.78rem;line-height:1.05}
+  .rt .t .l{font-weight:600;font-size:.72rem;line-height:1.12;white-space:normal;overflow-wrap:break-word}
   .rt .t.ok{background:#eafaec;border-color:var(--gruen)}
   .rt .t .hk{position:absolute;top:-.4rem;right:-.4rem;width:1.3rem;height:1.3rem;border-radius:50%;background:var(--gruen);color:#fff;display:grid;place-items:center;font-size:.85rem;transform:scale(0);transition:transform .3s cubic-bezier(.2,1.5,.4,1)}
   .rt .t.ok .hk{transform:scale(1)}
@@ -56,10 +56,9 @@
   .wis{margin-top:.5rem;background:#f7f4ff;border-radius:.8rem;padding:.5rem .6rem;font-size:.82rem;text-align:left}
   .wis b{color:var(--indigo)}
   /* Landschaft – echte iPhone-Fotos mit Tag/Nacht-Wechsel */
-  .lwrap{position:relative;height:248px;border-radius:1.2rem;overflow:hidden;margin-bottom:.5rem;box-shadow:0 8px 22px rgba(0,0,0,.22)}
-  .lwrap .ph{position:absolute;inset:0;background-size:cover;background-position:center 15%}
-  .lwrap .night{opacity:0;animation:daynight 7s ease-in-out infinite alternate}
-  @keyframes daynight{0%,32%{opacity:0}58%,100%{opacity:1}}
+  .lwrap{position:relative;height:300px;aspect-ratio:500/1082;margin:.2rem auto .5rem;border-radius:1.1rem;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.22)}
+  .lwrap .ph{position:absolute;inset:0;background-size:cover;background-position:center}
+  .lwrap .night{opacity:0;transition:opacity .12s linear}
   /* Spiel direkt in der Karte */
   .gstage{width:min(100%,240px);margin:.5rem auto 0}
   .gmsg{min-height:1.2rem;font-weight:700;color:var(--gruen);font-size:.9rem;margin-top:.35rem}
@@ -80,7 +79,8 @@
   #wave .card{background:#fff;border-radius:1.8rem;padding:1.6rem 1.4rem;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:340px;transform:scale(.85);opacity:0;transition:transform .6s .35s cubic-bezier(.2,1.4,.4,1),opacity .5s .35s}
   #wave.on .card{transform:none;opacity:1}
   #wave .intrologo svg{width:min(68vw,260px)}
-  #wave .bald{font-size:1.1rem;font-weight:700;color:var(--indigo);letter-spacing:.04em;text-transform:uppercase;margin-top:.3rem}
+  #wave .bald{font-size:1.1rem;font-weight:700;color:var(--indigo);letter-spacing:.04em;text-transform:uppercase;margin-bottom:.5rem}
+  #wave .sfair{font-size:1.35rem;font-weight:700;color:var(--tinte);margin-top:.25rem}
   #wave .sub2{font-size:.95rem;opacity:.8;margin:.5rem 0 .2rem}
   #wave .dslink{opacity:.6}
 </style>
@@ -100,13 +100,14 @@
 <div class="scroll-hint" id="hint">⌄</div>
 
 <div id="wave"><div class="card">
+  <div class="bald">Bald verfügbar</div>
   <div class="intrologo">
     <svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" aria-label="kidzlist">
       <text class="kdzwm" text-anchor="middle" x="610" y="270" fill="#1B1B2F">kidzlist</text>
       <text class="kdzwm" text-anchor="middle" x="600" y="260"><tspan fill="#FF3B30">k</tspan><tspan fill="#FF9500">i</tspan><tspan fill="#FFC72C">d</tspan><tspan fill="#2ECF6E">z</tspan><tspan fill="#2D7CF6">l</tspan><tspan fill="#5856D6">i</tspan><tspan fill="#AF52DE">s</tspan><tspan fill="#FF3D77">t</tspan></text>
     </svg>
   </div>
-  <div class="bald">Bald verfügbar</div>
+  <div class="sfair">Sicher & Fair</div>
   <div class="sub2">Für Eltern und Kinder gebaut.<br>Ohne Werbung, ohne Tracking.</div>
   <div class="stores">
     <a class="btn store" href="https://apps.apple.com/app/id6780948441" target="_blank" rel="noopener">App Store</a>
@@ -162,9 +163,9 @@ const STARS=[];
   const sc=[0xffffff,0xfff7cc,0xFFC72C,0xFF9500,0x2ECF6E,0x2D7CF6,0xAF52DE,0xFF3D77];
   for(let i=0;i<90;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(0.12+Math.random()*0.22,6,6),new THREE.MeshBasicMaterial({color:sc[i%sc.length]}));
     s.position.set(end.x+(Math.random()-0.5)*42,2.5+Math.random()*26,end.z-2+(Math.random()-0.5)*36);s.userData.ph=Math.random()*6.28;STARS.push(s);scene.add(s);}
-  const big=new THREE.Mesh(new THREE.SphereGeometry(1.6,18,18),new THREE.MeshBasicMaterial({color:0xfff7cc}));big.position.set(end.x,13,end.z-9);scene.add(big);
-  const board=new THREE.Mesh(new THREE.BoxGeometry(9,3.1,0.3),new THREE.MeshBasicMaterial({map:logoTex()}));board.position.set(end.x,4.6,end.z-9);scene.add(board);
-  [-3.6,3.6].forEach(dx=>{const po=new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.16,5.4,8),new THREE.MeshStandardMaterial({color:0xb07b4a}));po.position.set(end.x+dx,2.7,end.z-9);scene.add(po);});})();
+  const big=new THREE.Mesh(new THREE.SphereGeometry(1.6,18,18),new THREE.MeshBasicMaterial({color:0xfff7cc}));big.position.set(end.x,14,end.z-11);scene.add(big);
+  const board=new THREE.Mesh(new THREE.BoxGeometry(9,3.1,0.3),new THREE.MeshBasicMaterial({map:logoTex()}));board.position.set(end.x,3.8,end.z-1);scene.add(board);   // Banner direkt am Weg-Ende
+  [-3.6,3.6].forEach(dx=>{const po=new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.16,4.8,8),new THREE.MeshStandardMaterial({color:0xb07b4a}));po.position.set(end.x+dx,2.3,end.z-1);scene.add(po);});})();
 // Wolke an der Spitze – zieht die Linien hinter sich her
 const tip=new THREE.Group();
 [[0,0,0,1.15],[1,0.05,0,0.85],[-1,0.05,0,0.9],[0.5,0.55,0.1,0.72],[-0.5,0.5,-0.1,0.68],[0,0.15,0.7,0.7],[0,0.2,-0.6,0.66]].forEach(c=>{
@@ -180,8 +181,8 @@ const LAND=(t,m)=>`<div class="lwrap"><div class="ph" style="background-image:ur
 const BEATS=[
  {at:0.00,pos:'mid',html:`<div class="intrologo"><svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg"><text class="kdzwm" text-anchor="middle" x="610" y="270" fill="#1B1B2F">kidzlist</text><text class="kdzwm" text-anchor="middle" x="600" y="260"><tspan fill="#FF3B30">k</tspan><tspan fill="#FF9500">i</tspan><tspan fill="#FFC72C">d</tspan><tspan fill="#2ECF6E">z</tspan><tspan fill="#2D7CF6">l</tspan><tspan fill="#5856D6">i</tspan><tspan fill="#AF52DE">s</tspan><tspan fill="#FF3D77">t</tspan></text></svg></div><p class="sub">Routine für Kinder – Aufgaben mit Belohnung & Spaß</p>${STORES}<div class="weiter">So erlebt Ihr Kind die App – scroll los ⌄</div>`},
  {at:0.075,pos:'mid',html:`<h2>Jedes Kind sein Held</h2><p class="sub">33 gemalte Charaktere – eigene Farbe, eigenes Foto.</p><div class="chwrap"><div class="chrow2 r" id="chrowA"></div><div class="chrow2 l" id="chrowB"></div></div>`},
- {at:0.15,pos:'left',html:LAND('juni','Juni')+`<p class="sub">Jeder Tag eine kleine Landschaft – Tag und Nacht.</p>`},
- {at:0.225,pos:'right',html:LAND('dez','Dezember')+`<p class="sub">Jeden Monat eine neue Welt zum Sammeln.</p>`},
+ {at:0.15,pos:'left',land:true,html:LAND('juni','Juni')+`<p class="sub">Tagsüber sonnig – beim Weiterscrollen wird es Nacht.</p>`},
+ {at:0.225,pos:'right',land:true,html:LAND('dez','Dezember')+`<p class="sub">Jeden Monat eine neue Welt – auch im Winter.</p>`},
  {at:0.31,pos:'mid',html:`<h2>Morgenroutine</h2><p class="sub">Tipp die Aufgaben an – ganz allein.</p><div class="rt" id="rtMorgen"></div><div class="rtwin" id="winMorgen"></div>`},
  {at:0.39,pos:'mid',html:`<h2>Abendroutine</h2><p class="sub">Und abends genauso – Schritt für Schritt.</p><div class="rt" id="rtAbend"></div><div class="rtwin" id="winAbend"></div>`},
  {at:0.47,pos:'top',html:`<div class="featrow"><div class="ic"><img src="${IMG}logos/2b50.webp" alt=""></div><div><h2>Sammeln & Belohnung</h2><p>Routine geschafft = ein Logo gesammelt. Ganz ohne Druck.</p></div></div>`},
@@ -198,10 +199,10 @@ const ov=document.getElementById('ov');
 BEATS.forEach((b,i)=>{const d=document.createElement('div');d.className='beat pos-'+b.pos;d.id='b'+i;d.innerHTML=b.html;ov.appendChild(d);b.el=d;});
 
 // Routinen füllen (Hochformat-Kacheln, 2 Spalten)
-const MORNING=[["1f48b","Guten-Morgen-Kuss"],["1f6bd","Auf die Toilette"],["1f4a7","Wasser trinken"],["1f6cf-fe0f","Bett machen"],["1f963","Frühstücken"],["1f455","Anziehen"],["1f9b7","Zähne putzen"],["1f487","Haare machen"]];
-const EVENING=[["1f9f9","Zimmer aufräumen"],["1f319","Pyjama anziehen"],["1f6bd","Auf die Toilette"],["1f9b7","Zähne putzen"],["1f45a","Kleidung bereitlegen"],["1f392","Rucksack packen"],["1f4d6","Geschichte lesen"],["1f618","Gute-Nacht-Kuss"]];
+const MORNING=[["1f48b","Guten-Morgen-\nKuss"],["1f6bd","Auf die\nToilette"],["1f4a7","Wasser\ntrinken"],["1f6cf-fe0f","Bett\nmachen"],["1f963","Früh-\nstücken"],["1f455","An-\nziehen"],["1f9b7","Zähne\nputzen"],["1f487","Haare\nmachen"]];
+const EVENING=[["1f9f9","Zimmer\naufräumen"],["1f319","Pyjama\nanziehen"],["1f6bd","Auf die\nToilette"],["1f9b7","Zähne\nputzen"],["1f45a","Kleidung\nbereitlegen"],["1f392","Rucksack\npacken"],["1f4d6","Geschichte\nlesen"],["1f618","Gute-Nacht-\nKuss"]];
 function fillRoutine(boxId,tasks,winId){const box=document.getElementById(boxId);
-  tasks.forEach(t=>{const e=document.createElement('div');e.className='t';e.innerHTML=`<img src="${IMG}tasks/${t[0]}.webp" alt=""><span class="l">${t[1]}</span><span class="hk">✓</span>`;
+  tasks.forEach(t=>{const e=document.createElement('div');e.className='t';e.innerHTML=`<img src="${IMG}tasks/${t[0]}.webp" alt=""><span class="l">${t[1].replace(/\n/g,'<br>')}</span><span class="hk">✓</span>`;
     e.onclick=()=>{e.classList.toggle('ok');const n=box.querySelectorAll('.t.ok').length,w=document.getElementById(winId);if(n===tasks.length){w.textContent='Geschafft! 🎉';konf();}else w.textContent='';};box.appendChild(e);});}
 fillRoutine('rtMorgen',MORNING,'winMorgen');fillRoutine('rtAbend',EVENING,'winAbend');
 const CHARS=["unicorn","princess","Fee","mermaid","Drache","Schmetterling","hero","Roboter","ritter","pirat","ninja","samurai","aerztin","astronautin","pilot","polizist","feuerwehr","saengerin"];
@@ -218,6 +219,7 @@ function fromScroll(){const max=document.getElementById('scroller').offsetHeight
     if(b.won){b.el.style.opacity='0';b.el.classList.remove('on');return;}
     const dist=Math.abs(tgtT-b.at);let o=Math.max(0,Math.min(1,(1-dist/HALF)*1.25));
     b.el.style.opacity=o;b.el.classList.toggle('on',o>0.55);
+    if(b.land){const ni=b.el.querySelector('.night');if(ni)ni.style.opacity=Math.max(0,Math.min(1,(tgtT-(b.at-HALF))/(2*HALF)));}   // Tag->Nacht an den Scroll gekoppelt
     if(b.game){if(o>0.8&&!b.live){b.live=true;b.clean=GAMES[b.game](b.el.querySelector('.gstage'),IMG+b.img+'.webp',b.el.querySelector('.gmsg'),b);}
       else if(o<0.5&&b.live){b.live=false;if(b.clean){b.clean();b.clean=null;}b.el.querySelector('.gmsg').textContent='';}}});
   document.getElementById('hud').classList.toggle('on',tgtT>0.05&&tgtT<0.95);
