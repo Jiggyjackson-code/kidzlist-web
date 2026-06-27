@@ -240,7 +240,7 @@ const T={
 let L=({el:'gr',en:'en',de:'de'})[(navigator.language||'de').slice(0,2).toLowerCase()]||'de';
 let TT=T[L];
 function makeBeats(t){return[
- {pos:'mid',img2:'comic/morgen-problem',html:`<div class="cpanel morn"><span class="cph">🌅</span><div class="cbub tl">${t.comic_wake}</div><div class="cbub br shout">${t.comic_no}</div></div><div class="weiter">${t.intro_w}</div>`},
+ {pos:'mid',img2:'comic/morgen-problem',html:`<div class="cpanel morn"><span class="cph">🌅</span><div class="cbub tl">${t.comic_wake}</div><div class="cbub br shout">${t.comic_no}</div></div><div class="weiter">⌄</div>`},
  {pos:'mid',img2:'comic/abend-problem',html:`<div class="cpanel night"><span class="cph">🌙</span><div class="cbub tl">${t.comic_sleep}</div><div class="cbub br shout">${t.comic_no}</div></div><div class="weiter">⌄</div>`},
  {pos:'mid',html:`<div class="study"><div class="bignum">90%</div><p class="sub">${t.study_txt}</p><div class="ssrc">${t.study_src}</div></div><div class="weiter">⌄</div>`},
  {pos:'mid',img2:'comic/morgen-loesung',html:`<div class="cpanel morn"><span class="cph">☀️</span><div class="cbub tl">${t.comic_morningroutine}</div><div class="cbub br">${t.comic_yay}</div></div><div class="weiter">⌄</div>`},
