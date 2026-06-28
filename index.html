@@ -465,21 +465,21 @@ const EXTRA4={
    comic_sleep:"Komm, mein Schatz, es ist wirklich Zeit fürs Bett.",comic_more:"Och nö, nur noch ein kleines bisschen spielen, bitte!",
    comic_morningroutine:"Schau mal, ich mach meine Morgenroutine ganz allein!",comic_logo:"Juhuu, ich hab einen Stern bekommen!",
    comic_routine:"Jetzt noch die Abendroutine, dann hab ich heute alles geschafft!",comic_done:"Fertig! Und ich freu mich schon auf morgen!",
-   study_h:"Warum spielerische Routinen wirken",study1:"der Eltern kämpfen morgens mit der Routine",study1s:"Indeed-Elternumfrage",
+   study_h:"Warum spielerische Routinen wirken",study1:"der Mütter kämpfen morgens mit der Routine",study1s:"Indeed-Umfrage",
    study2:"der Eltern ringen abends mit dem Zubettgehen",study2s:"C.S. Mott Children's Hospital",
    study3:"Sterne sammeln motiviert – von Kinderärzten empfohlen",study3s:"American Academy of Pediatrics"},
  en:{comic_wake:"Come on, sweetie! Let's get dressed or we'll be late.",comic_no:"No! I don't want to get dressed right now!",
    comic_sleep:"Come on, darling, it's really time for bed.",comic_more:"Aw, just a little bit longer, please!",
    comic_morningroutine:"Look, I'm doing my morning routine all by myself!",comic_logo:"Yay, I got a star!",
    comic_routine:"Now the evening routine, and I've done everything today!",comic_done:"All done! And I can't wait for tomorrow!",
-   study_h:"Why playful routines work",study1:"of parents struggle with the morning routine",study1s:"Indeed parent survey",
+   study_h:"Why playful routines work",study1:"of mothers struggle with the morning routine",study1s:"Indeed survey",
    study2:"of parents struggle with bedtime",study2s:"C.S. Mott Children's Hospital",
    study3:"Collecting stars motivates – recommended by pediatricians",study3s:"American Academy of Pediatrics"},
  gr:{comic_wake:"Έλα, αγάπη μου! Πρέπει να ντυθούμε, αλλιώς θα αργήσουμε.",comic_no:"Όχι! Δεν θέλω να ντυθώ τώρα!",
    comic_sleep:"Έλα, καρδιά μου, ήρθε πραγματικά η ώρα για ύπνο.",comic_more:"Όχι, λίγο ακόμα να παίξω, σε παρακαλώ!",
    comic_morningroutine:"Κοίτα, κάνω μόνος μου την πρωινή ρουτίνα!",comic_logo:"Ναι! Πήρα ένα αστέρι!",
    comic_routine:"Τώρα η βραδινή ρουτίνα, και τα κατάφερα όλα σήμερα!",comic_done:"Έτοιμο! Και ανυπομονώ για αύριο!",
-   study_h:"Γιατί πετυχαίνουν οι παιχνιδιάρικες ρουτίνες",study1:"των γονιών παλεύουν με την πρωινή ρουτίνα",study1s:"Έρευνα γονιών Indeed",
+   study_h:"Γιατί πετυχαίνουν οι παιχνιδιάρικες ρουτίνες",study1:"των μητέρων παλεύουν με την πρωινή ρουτίνα",study1s:"Έρευνα Indeed",
    study2:"των γονιών δυσκολεύονται με τον ύπνο",study2s:"C.S. Mott Children's Hospital",
    study3:"Η συλλογή αστεριών παρακινεί – προτείνεται από παιδιάτρους",study3s:"American Academy of Pediatrics"}
 };
@@ -750,7 +750,7 @@ function konfBoom(){for(let i=0;i<130;i++){const k=document.createElement('div')
   k.style.left='50vw';k.style.top='52vh';k.style.background=KCOLS[i%7];k.style.setProperty('--tx',(Math.cos(ang)*dist)+'vw');k.style.setProperty('--ty',(Math.sin(ang)*dist)+'vh');
   k.style.animation=`boom ${1+Math.random()*0.9}s ease-out forwards`;document.body.appendChild(k);setTimeout(()=>k.remove(),2200);}}
 // Hintergrund-Musik aus der App (an/aus per Knopf; startet auf Klick wegen Autoplay-Regeln)
-const bgm=document.getElementById('bgm');bgm.volume=0.22;   // halb so laut wie vorher (Gerit 2026-06-28)
+const bgm=document.getElementById('bgm');bgm.volume=0.055;   // dezente Hintergrundmusik, auch bei voller iPhone-Lautstaerke leise (Gerit 2026-06-28)
 const sndBtn=document.getElementById('snd');
 function setSnd(an){const im=sndBtn.querySelector('img');if(im)im.src=IMG+'ui/'+(an?'lautsprecher':'lautsprecher_aus')+'.webp';}
 sndBtn.onclick=function(){bgm.muted=false;if(bgm.paused){bgm.play().then(()=>setSnd(true)).catch(()=>{});}else{bgm.pause();setSnd(false);}};
