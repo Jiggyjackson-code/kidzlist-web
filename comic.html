@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kidzlist – Comic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1F1F2E; --cream:#FAF6EE; --surface:#fff;
+    --yellow:#FFC72C; --pink:#E04279; --blue:#2E6CD9; --green:#3FA56A;
+    --orange:#FF8A3D; --indigo:#6366F1; --magenta:#C026D3; --red:#DC4C5D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:#efe7d6;color:var(--ink);font-family:'Nunito',system-ui,sans-serif}
+  body{display:flex;flex-direction:column;align-items:center;padding-bottom:3rem}
+
+  /* Kopf: Logo + Steuerung */
+  header{position:sticky;top:0;z-index:20;width:100%;max-width:460px;
+    display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+    padding:.6rem .8rem;background:rgba(250,246,238,.92);backdrop-filter:blur(6px);
+    border-bottom:2px solid rgba(31,31,46,.08)}
+  .logo{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.5rem;letter-spacing:-.5px}
+  .logo span{display:inline-block}
+  .ctrl{display:flex;align-items:center;gap:.4rem}
+  .lang{display:flex;gap:2px;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:2px}
+  .lang button{font:inherit;font-weight:800;font-size:.72rem;border:0;background:none;color:var(--ink);
+    padding:.18rem .42rem;border-radius:999px;cursor:pointer;opacity:.5}
+  .lang button.on{background:var(--ink);color:#fff;opacity:1}
+  .play{font:inherit;font-weight:800;font-size:.8rem;border:2px solid var(--ink);background:var(--yellow);
+    color:var(--ink);border-radius:999px;padding:.3rem .7rem;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+  .play:active{transform:translatey(2px);box-shadow:0 1px 0 var(--ink)}
+
+  .stage{width:100%;max-width:460px;padding:1rem .8rem 0}
+
+  /* Eine Comic-Seite */
+  .page{background:var(--cream);border:3px solid var(--ink);border-radius:1.4rem;
+    padding:1rem .9rem 1.1rem;margin-bottom:1.3rem;box-shadow:0 10px 0 rgba(31,31,46,.12)}
+  .band{font-family:'Fredoka',sans-serif;font-weight:600;text-align:center;line-height:1.25;
+    background:var(--yellow);border:3px solid var(--ink);border-radius:.9rem;
+    padding:.55rem .7rem;box-shadow:0 4px 0 var(--ink)}
+  .band.top{font-size:1.12rem;margin-bottom:.85rem}
+  .band.bot{font-size:1rem;margin-top:.9rem;background:#fff}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+
+  .cpanel{position:relative;aspect-ratio:1/1;border:3px solid var(--ink);border-radius:.8rem;
+    overflow:hidden;background-size:cover;background-position:center;
+    display:grid;place-items:center;opacity:0;transform:scale(.82) translateY(14px) rotate(-2.5deg)}
+  .page.on .cpanel{animation:cpop .6s cubic-bezier(.2,1.5,.4,1) forwards;animation-delay:var(--d)}
+  .cpanel.morn{background-color:#bfe0ff;background-image:linear-gradient(165deg,#a9d6ff,#ffe9b8)}
+  .cpanel.morn.sunny{background-image:linear-gradient(165deg,#9fd2ff,#fff0c0,#ffd98a)}
+  .cpanel.night{background-color:#46578f;background-image:linear-gradient(165deg,#3a4c84,#6c7fb8)}
+  .cpanel.night.warm{background-image:linear-gradient(165deg,#3b4a86,#7d6fa8,#caa6c0)}
+  .cph{font-size:3.1rem;filter:drop-shadow(0 3px 2px rgba(0,0,0,.18));opacity:.92}
+
+  /* Sprechblasen (scharfe Ebene über dem Bild) */
+  .cbub{position:absolute;max-width:74%;font-weight:800;font-size:.74rem;line-height:1.15;
+    background:#fff;color:var(--ink);border:2.5px solid var(--ink);border-radius:.7rem;
+    padding:.3rem .46rem;box-shadow:0 2px 0 rgba(31,31,46,.5);opacity:0;transform:scale(.6)}
+  .page.on .cbub{animation:bub .42s cubic-bezier(.2,1.7,.4,1) forwards;animation-delay:calc(var(--d) + .42s)}
+  .cbub.tl{top:.4rem;left:.4rem;border-bottom-left-radius:.15rem}
+  .cbub.br{right:.4rem;bottom:.4rem;border-bottom-right-radius:.15rem;background:var(--yellow)}
+  .cbub.shout{font-size:.96rem;font-family:'Fredoka',sans-serif;transform:scale(.6) rotate(-3deg)}
+  .page.on .cbub.shout{animation:bubshout .42s cubic-bezier(.2,1.7,.4,1) forwards;animation-delay:calc(var(--d) + .42s)}
+
+  @keyframes cpop{0%{opacity:0;transform:scale(.82) translateY(14px) rotate(-2.5deg)}
+    60%{opacity:1}100%{opacity:1;transform:none}}
+  @keyframes bub{to{opacity:1;transform:none}}
+  @keyframes bubshout{to{opacity:1;transform:rotate(-3deg)}}
+
+  /* Studie als Wendepunkt zwischen den Seiten */
+  .study{text-align:center;padding:.4rem 0 1.5rem}
+  .bignum{font-family:'Fredoka',sans-serif;font-weight:700;font-size:3.4rem;line-height:1;
+    color:var(--pink);text-shadow:0 4px 0 rgba(31,31,46,.18)}
+  .study p{font-weight:700;font-size:.92rem;max-width:22rem;margin:.4rem auto 0}
+  .ssrc{font-size:.66rem;opacity:.55;margin-top:.3rem}
+
+  footer{text-align:center;margin-top:.5rem}
+  footer .logo{font-size:2rem}
+  footer .sub{font-weight:700;font-size:.86rem;opacity:.7;margin-top:.2rem}
+  footer .stores{font-size:.78rem;opacity:.6;margin-top:.4rem}
+  .hint{max-width:460px;font-size:.72rem;text-align:center;opacity:.55;padding:.2rem 1rem 1rem}
+  @media (prefers-reduced-motion:reduce){.cpanel,.cbub{animation:none!important;opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" id="logo"></div>
+  <div class="ctrl">
+    <div class="lang" id="lang">
+      <button data-l="de">DE</button><button data-l="en">EN</button><button data-l="el">GR</button>
+    </div>
+    <button class="play" id="play">&#9654;</button>
+  </div>
+</header>
+
+<div class="stage" id="stage"></div>
+<div class="hint" id="hint"></div>
+
+<script>
+/* ---- Texte (DE / EN / GR) ------------------------------------------------ */
+const T = {
+  de:{ comic_wake:"Aufstehen und anziehen!", comic_no:"Nein! Nein! 😫",
+       comic_sleep:"Zeit zum Schlafen!", comic_more:"Nur noch ein bisschen!",
+       comic_morningroutine:"Zeit für die Morgenroutine! 🎵", comic_logo:"Juhu, ein Stern! ⭐",
+       comic_routine:"Zeit für die Abendroutine! 🎵", comic_done:"Alles geschafft! 🏆",
+       cap1:"Jeden Morgen das gleiche Theater?", cap2:"Und abends genauso.",
+       cap3:"Mit Kidzlist wird die Routine zum Spiel.",
+       cap4:"Sammeln, schaffen, stolz sein – ganz ohne Druck.",
+       study_txt:"von über 300.000 Familien sagen: Mit spielerischen Aufgaben klappt die Routine besser.",
+       study_src:"(Quelle wird noch ergänzt)", soon:"Bald verfügbar", stores:"App Store · Google Play",
+       hint:"Vorschau mit Platzhaltern – die Emoji-Felder werden durch echte Comic-Bilder ersetzt." },
+  en:{ comic_wake:"Time to get up and dressed!", comic_no:"No! No! 😫",
+       comic_sleep:"Time for bed!", comic_more:"Just a bit longer!",
+       comic_morningroutine:"Time for the morning routine! 🎵", comic_logo:"Yay, a star! ⭐",
+       comic_routine:"Time for the evening routine! 🎵", comic_done:"All done! 🏆",
+       cap1:"Every morning the same drama?", cap2:"And the same every evening.",
+       cap3:"With Kidzlist the routine becomes a game.",
+       cap4:"Collect, achieve, be proud – with no pressure.",
+       study_txt:"of 300,000+ families say: playful tasks make the routine work better.",
+       study_src:"(source to be added)", soon:"Coming soon", stores:"App Store · Google Play",
+       hint:"Preview with placeholders – the emoji panels will be replaced by real comic images." },
+  el:{ comic_wake:"Ώρα να σηκωθείς!", comic_no:"Όχι! Όχι! 😫",
+       comic_sleep:"Ώρα για ύπνο!", comic_more:"Λίγο ακόμα!",
+       comic_morningroutine:"Ώρα για την πρωινή ρουτίνα! 🎵", comic_logo:"Γιούπι, ένα αστέρι! ⭐",
+       comic_routine:"Ώρα για τη βραδινή ρουτίνα! 🎵", comic_done:"Τα κατάφερα! 🏆",
+       cap1:"Κάθε πρωί το ίδιο δράμα;", cap2:"Και κάθε βράδυ το ίδιο.",
+       cap3:"Με το Kidzlist η ρουτίνα γίνεται παιχνίδι.",
+       cap4:"Μάζεψε, κατάφερε, καμάρωσε – χωρίς πίεση.",
+       study_txt:"από 300.000+ οικογένειες λένε: με παιχνίδι η ρουτίνα πετυχαίνει καλύτερα.",
+       study_src:"(η πηγή θα προστεθεί)", soon:"Σύντομα κοντά σας", stores:"App Store · Google Play",
+       hint:"Προεπισκόπηση με σύμβολα – τα πλαίσια θα αντικατασταθούν με πραγματικές εικόνες." }
+};
+
+/* ---- Drehbuch: 8 Panels (2 Seiten à 4) ----------------------------------- */
+const IMG='assets/img/comic/';
+const PAGES = [
+  { titleKey:'cap1', footKey:'cap2', panels:[
+    {img:'morgen-problem-1', ph:'🛏️', tone:'morn',  bub:'comic_wake',  pos:'tl'},
+    {img:'morgen-problem-2', ph:'🙅', tone:'morn',  bub:'comic_no',    pos:'br', shout:1},
+    {img:'abend-problem-1',  ph:'🧸', tone:'night', bub:'comic_sleep', pos:'tl'},
+    {img:'abend-problem-2',  ph:'😫', tone:'night', bub:'comic_more',  pos:'br', shout:1},
+  ]},
+  { titleKey:'cap3', footKey:'cap4', panels:[
+    {img:'morgen-app-1', ph:'📱', tone:'morn sunny',  bub:'comic_morningroutine', pos:'tl'},
+    {img:'morgen-app-2', ph:'⭐', tone:'morn sunny',  bub:'comic_logo',           pos:'br'},
+    {img:'abend-app-1',  ph:'🌙', tone:'night warm',  bub:'comic_routine',        pos:'tl'},
+    {img:'abend-app-2',  ph:'🏆', tone:'night warm',  bub:'comic_done',           pos:'br'},
+  ]},
+];
+
+let L = ({el:'el',en:'en',de:'de'})[(navigator.language||'de').slice(0,2).toLowerCase()] || 'de';
+
+const LOGO_COLORS=['--pink','--blue','--green','--red','--orange','--yellow','--indigo','--magenta'];
+function logoHTML(){ return [...'kidzlist'].map((c,i)=>
+  `<span style="color:var(${LOGO_COLORS[i%8]})">${c}</span>`).join(''); }
+
+function panelHTML(p,idx){
+  const t=T[L];
+  const bub=`<div class="cbub ${p.pos}${p.shout?' shout':''}">${t[p.bub]}</div>`;
+  return `<div class="cpanel ${p.tone}" data-img="${p.img}" style="--d:${(idx*0.18).toFixed(2)}s">
+            <span class="cph">${p.ph}</span>${bub}</div>`;
+}
+function render(){
+  const t=T[L];
+  document.documentElement.lang = (L==='el'?'el':L);
+  document.getElementById('logo').innerHTML = logoHTML();
+  document.getElementById('hint').textContent = t.hint;
+  let h='';
+  PAGES.forEach((pg,pi)=>{
+    h+=`<section class="page" id="pg${pi}">
+          <div class="band top">${t[pg.titleKey]}</div>
+          <div class="grid">${pg.panels.map(panelHTML).join('')}</div>
+          <div class="band bot">${t[pg.footKey]}</div>
+        </section>`;
+    if(pi===0){
+      h+=`<section class="study" id="study">
+            <div class="bignum">90%</div><p>${t.study_txt}</p><div class="ssrc">${t.study_src}</div>
+          </section>`;
+    }
+  });
+  h+=`<footer><div class="logo">${logoHTML()}</div>
+        <div class="sub">${t.soon}</div><div class="stores">${t.stores}</div></footer>`;
+  document.getElementById('stage').innerHTML=h;
+  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+  observe(); loadComic();
+}
+
+/* Panels poppen ein, sobald die Seite in den Blick scrollt */
+let io;
+function observe(){
+  if(io) io.disconnect();
+  io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('on');});},
+    {threshold:0.28});
+  document.querySelectorAll('.page').forEach(p=>io.observe(p));
+}
+
+/* Echte Bilder laden, sobald vorhanden – sonst bleibt das Emoji */
+function loadComic(){
+  document.querySelectorAll('.cpanel').forEach(el=>{
+    const name=el.dataset.img; if(!name) return;
+    const im=new Image();
+    im.onload=()=>{ el.style.backgroundImage="url('"+IMG+name+".webp')";
+      const ph=el.querySelector('.cph'); if(ph) ph.style.display='none'; };
+    im.src=IMG+name+'.webp';
+  });
+}
+
+function setLang(l){ L=l; render(); }
+function play(){
+  const secs=[...document.querySelectorAll('.page,.study,footer')];
+  let i=0;
+  (function step(){ if(i>=secs.length) return;
+    secs[i].scrollIntoView({behavior:'smooth',block:'center'});
+    i++; setTimeout(step, 2600); })();
+}
+
+document.getElementById('lang').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(b) setLang(b.dataset.l);});
+document.getElementById('play').addEventListener('click',play);
+render();
+</script>
+</body>
+</html>
