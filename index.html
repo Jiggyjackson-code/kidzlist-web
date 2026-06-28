@@ -580,8 +580,9 @@ function resetRoutineSeq(){routineSeqRun=false;rtTimers.forEach(clearTimeout);rt
 // ===== Spiele 2x2: Vorschau (ausgegraut) -> spielt sich nacheinander vor (farbig) -> Klick startet das echte Spiel =====
 const G4=[{k:'swap',label:'g_swap',img:'puzzle/maerchen/01'},{k:'insert',label:'g_insert',img:'puzzle/helden/01'},{k:'scratch',label:'g_scratch',img:'puzzle/tiere/01'},{k:'catch',label:'g_catch',img:'logos/2b50'}];
 // 2x2-Jigsaw mit echten Puzzle-Konturen fuer die Vorschau (nutzt jpEdges/jpPath wie das echte Einsetzen-Spiel; das 4. Teil fliegt rein)
+let G4JID=0;   // eigener Zaehler -- NICHT das weiter unten per let deklarierte JPID (sonst TDZ beim ersten Render, Lehre #139)
 function g4InsertHTML(url){
-  const n=2,cell=44,m=Math.round(cell*0.26),piece=cell+2*m,bs=cell*n,id=++JPID;
+  const n=2,cell=44,m=Math.round(cell*0.26),piece=cell+2*m,bs=cell*n,id=++G4JID;
   const E=jpEdges(n),paths={};
   for(let idx=0;idx<n*n;idx++)paths[idx]=jpPath(cell,m,E[idx]);
   const pc=(idx,fly)=>{const r=Math.floor(idx/n),c=idx%n,ix=(-c*cell+m).toFixed(1),iy=(-r*cell+m).toFixed(1),left=c*cell-m,top=r*cell-m;
