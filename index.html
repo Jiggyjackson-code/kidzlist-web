@@ -628,7 +628,9 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';scrollTo(0,
 let curT=0,tgtT=0,waveOn=false,curBeat=0,musikAuto=false;
 const NB=BEATS.length,HALF=0.024;
 const GAMES={swap:gSwap,insert:gInsert,scratch:gScratch,catch:gCatch};
-function goBeat(dir){if(document.getElementById('gameModal').classList.contains('on'))return;const n=Math.max(0,Math.min(NB,curBeat+dir));if(n===curBeat)return;curBeat=n;tgtT=(curBeat>=NB)?1:BEATS[curBeat].at;}   // Fahrt steht still, solange ein Spiel offen ist (Gerit 2026-06-28)
+function goBeat(dir){if(document.getElementById('gameModal').classList.contains('on'))return;const n=Math.max(0,Math.min(NB,curBeat+dir));if(n===curBeat)return;curBeat=n;tgtT=(curBeat>=NB)?1:BEATS[curBeat].at;
+  // Musik startet von allein nach dem letzten Comic (Beat 2 = Comic 2) -- direkt in der Wisch-Geste, sonst blockt der Autoplay-Schutz (Gerit 2026-06-28)
+  if(!musikAuto&&curBeat>2){musikAuto=true;const a=document.getElementById('bgm');if(a){a.play().then(()=>setSnd(true)).catch(()=>{});}}}
 function updateBeats(t){
   BEATS.forEach(b=>{
     if(b.won){b.el.style.opacity='0';b.el.classList.remove('on');return;}
@@ -646,9 +648,6 @@ function updateBeats(t){
   document.getElementById('hud').classList.toggle('on',t<0.95);   // kidzlist-Kopf durchgehend, auch beim ersten Comic (Gerit 2026-06-28)
   document.getElementById('hint').style.opacity=(t>0.92||curBeat>=NB-2)?'0':'.45';
   document.getElementById('prog').style.transform='scaleX('+t+')';
-  // Musik startet automatisch nach den Comics, sobald die Reise im Hauptteil ist (Gerit 2026-06-28).
-  // Greift nur, wenn der Nutzer den Ton nicht schon selbst gesetzt hat; per Geste (Wischen) ist play() erlaubt.
-  if(!musikAuto&&t>0.24){const a=document.getElementById('bgm');if(a&&a.paused){musikAuto=true;a.play().then(()=>setSnd(true)).catch(()=>{});}}
 }
 // Eingabe -> ein Schritt pro Geste (Wheel gedrosselt, Touch-Swipe, Tastatur)
 let wlock=false;
