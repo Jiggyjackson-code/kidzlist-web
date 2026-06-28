@@ -630,7 +630,7 @@ const NB=BEATS.length,HALF=0.024;
 const GAMES={swap:gSwap,insert:gInsert,scratch:gScratch,catch:gCatch};
 function goBeat(dir){if(document.getElementById('gameModal').classList.contains('on'))return;const n=Math.max(0,Math.min(NB,curBeat+dir));if(n===curBeat)return;curBeat=n;tgtT=(curBeat>=NB)?1:BEATS[curBeat].at;
   // Musik startet von allein nach dem letzten Comic (Beat 2 = Comic 2) -- direkt in der Wisch-Geste, sonst blockt der Autoplay-Schutz (Gerit 2026-06-28)
-  if(!musikAuto&&curBeat>2){musikAuto=true;const a=document.getElementById('bgm');if(a){a.muted=false;a.play().then(()=>setSnd(true)).catch(()=>{});}}}
+  if(!musikAuto&&curBeat>2){musikAuto=true;playBgm();}}
 function updateBeats(t){
   BEATS.forEach(b=>{
     if(b.won){b.el.style.opacity='0';b.el.classList.remove('on');return;}
@@ -750,13 +750,21 @@ function konfBoom(){for(let i=0;i<130;i++){const k=document.createElement('div')
   k.style.left='50vw';k.style.top='52vh';k.style.background=KCOLS[i%7];k.style.setProperty('--tx',(Math.cos(ang)*dist)+'vw');k.style.setProperty('--ty',(Math.sin(ang)*dist)+'vh');
   k.style.animation=`boom ${1+Math.random()*0.9}s ease-out forwards`;document.body.appendChild(k);setTimeout(()=>k.remove(),2200);}}
 // Hintergrund-Musik aus der App (an/aus per Knopf; startet auf Klick wegen Autoplay-Regeln)
-const bgm=document.getElementById('bgm');bgm.volume=0.055;   // dezente Hintergrundmusik, auch bei voller iPhone-Lautstaerke leise (Gerit 2026-06-28)
+const bgm=document.getElementById('bgm');bgm.volume=0.055;   // Fallback (iOS ignoriert audio.volume -> Web-Audio-Gain unten steuert die Lautstaerke)
 const sndBtn=document.getElementById('snd');
 function setSnd(an){const im=sndBtn.querySelector('img');if(im)im.src=IMG+'ui/'+(an?'lautsprecher':'lautsprecher_aus')+'.webp';}
-sndBtn.onclick=function(){bgm.muted=false;if(bgm.paused){bgm.play().then(()=>setSnd(true)).catch(()=>{});}else{bgm.pause();setSnd(false);}};
-// iOS: Audio bei der ALLERERSTEN Nutzer-Geste freischalten (stumm anspielen + pausieren), sonst blockt der spaetere Auto-Start nach den Comics
+// iOS Safari steuert die Lautstaerke NICHT ueber audio.volume -- daher die Musik durch einen Web-Audio-GainNode leiten (Gerit 2026-06-28)
+const BGM_VOL=0.055; let audioCtx=null,bgmGain=null;
+function wireBgm(){ if(audioCtx)return;
+  try{ const AC=window.AudioContext||window.webkitAudioContext; if(!AC){bgm.volume=BGM_VOL;return;}
+    audioCtx=new AC(); const src=audioCtx.createMediaElementSource(bgm); bgmGain=audioCtx.createGain(); bgmGain.gain.value=BGM_VOL; src.connect(bgmGain); bgmGain.connect(audioCtx.destination); bgm.volume=1;
+  }catch(e){ bgm.volume=BGM_VOL; } }
+function playBgm(){ wireBgm(); if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(()=>{}); bgm.muted=false; bgm.play().then(()=>setSnd(true)).catch(()=>{}); }
+sndBtn.onclick=function(){ if(bgm.paused){playBgm();}else{bgm.pause();setSnd(false);} };
+// iOS: Audio + Context bei der ALLERERSTEN Nutzer-Geste freischalten, sonst blockt der spaetere Auto-Start nach den Comics
 let bgmUnlocked=false;
-function unlockBgm(){if(bgmUnlocked)return;bgmUnlocked=true;bgm.muted=true;const p=bgm.play();if(p&&p.then)p.then(()=>{if(!musikAuto){bgm.pause();bgm.currentTime=0;}bgm.muted=false;}).catch(()=>{bgm.muted=false;});}
+function unlockBgm(){ if(bgmUnlocked)return;bgmUnlocked=true; wireBgm(); if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});
+  bgm.muted=true; const p=bgm.play(); if(p&&p.then)p.then(()=>{if(!musikAuto){bgm.pause();bgm.currentTime=0;}bgm.muted=false;}).catch(()=>{bgm.muted=false;}); }
 ['touchstart','pointerdown','keydown'].forEach(ev=>addEventListener(ev,unlockBgm,{once:true,passive:true}));
 </script>
 </body>
