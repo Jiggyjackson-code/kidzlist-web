@@ -750,16 +750,13 @@ function konfBoom(){for(let i=0;i<130;i++){const k=document.createElement('div')
   k.style.left='50vw';k.style.top='52vh';k.style.background=KCOLS[i%7];k.style.setProperty('--tx',(Math.cos(ang)*dist)+'vw');k.style.setProperty('--ty',(Math.sin(ang)*dist)+'vh');
   k.style.animation=`boom ${1+Math.random()*0.9}s ease-out forwards`;document.body.appendChild(k);setTimeout(()=>k.remove(),2200);}}
 // Hintergrund-Musik aus der App (an/aus per Knopf; startet auf Klick wegen Autoplay-Regeln)
-// Lautstaerke steckt jetzt in der Datei (musik.mp3 auf 20% exportiert) -- wirkt auch auf iOS, das audio.volume ignoriert. Kein Web Audio (das machte iOS still). (Gerit 2026-06-28)
+// Lautstaerke steckt in der Datei (musik.mp3 auf 10% exportiert). Kein Web Audio + KEIN stummes Vorab-Anspielen,
+// damit iOS den Stumm-Schalter respektiert: bei Stumm bleibt die Musik aus, nur bei Klingelton-an spielt sie. (Gerit 2026-06-28)
 const bgm=document.getElementById('bgm');bgm.volume=1;
 const sndBtn=document.getElementById('snd');
 function setSnd(an){const im=sndBtn.querySelector('img');if(im)im.src=IMG+'ui/'+(an?'lautsprecher':'lautsprecher_aus')+'.webp';}
-function playBgm(){ bgm.muted=false; bgm.play().then(()=>setSnd(true)).catch(()=>{}); }
+function playBgm(){ bgm.play().then(()=>setSnd(true)).catch(()=>{}); }   // spielt in der Wisch-Geste; respektiert den Stumm-Schalter
 sndBtn.onclick=function(){ if(bgm.paused){playBgm();}else{bgm.pause();setSnd(false);} };
-// iOS: Audio bei der ALLERERSTEN Nutzer-Geste freischalten (stumm anspielen + pausieren), sonst blockt der spaetere Auto-Start nach den Comics
-let bgmUnlocked=false;
-function unlockBgm(){ if(bgmUnlocked)return;bgmUnlocked=true; bgm.muted=true; const p=bgm.play(); if(p&&p.then)p.then(()=>{if(!musikAuto){bgm.pause();bgm.currentTime=0;}bgm.muted=false;}).catch(()=>{bgm.muted=false;}); }
-['touchstart','pointerdown','keydown'].forEach(ev=>addEventListener(ev,unlockBgm,{once:true,passive:true}));
 </script>
 </body>
 </html>
