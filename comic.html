@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Kidzlist – Comic (Last-War-Format, Justier-Prototyp)</title>
+<title>Kidslist – Comic (Last-War-Format, Justier-Prototyp)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -163,7 +163,7 @@ const T = {
        comic_morningroutine:"Zeit für die Morgenroutine! 🎵", comic_logo:"Juhu, ein Stern! ⭐",
        comic_routine:"Zeit für die Abendroutine! 🎵", comic_done:"Alles geschafft! 🏆",
        cap1:"Jeden Morgen das gleiche Theater?", cap2:"Und abends genauso.",
-       cap3:"Mit Kidzlist wird die Routine zum Spiel.",
+       cap3:"Mit Kidslist wird die Routine zum Spiel.",
        cap4:"Sammeln, schaffen, stolz sein – ganz ohne Druck.",
        study_txt:"von über 300.000 Familien sagen: Mit spielerischen Aufgaben klappt die Routine besser.",
        study_src:"(Quelle wird noch ergänzt)", soon:"Bald verfügbar", stores:"App Store · Google Play" },
@@ -172,7 +172,7 @@ const T = {
        comic_morningroutine:"Time for the morning routine! 🎵", comic_logo:"Yay, a star! ⭐",
        comic_routine:"Time for the evening routine! 🎵", comic_done:"All done! 🏆",
        cap1:"Every morning the same drama?", cap2:"And the same every evening.",
-       cap3:"With Kidzlist the routine becomes a game.",
+       cap3:"With Kidslist the routine becomes a game.",
        cap4:"Collect, achieve, be proud – with no pressure.",
        study_txt:"of 300,000+ families say: playful tasks make the routine work better.",
        study_src:"(source to be added)", soon:"Coming soon", stores:"App Store · Google Play" },
@@ -181,7 +181,7 @@ const T = {
        comic_morningroutine:"Ώρα για την πρωινή ρουτίνα! 🎵", comic_logo:"Γιούπι, ένα αστέρι! ⭐",
        comic_routine:"Ώρα για τη βραδινή ρουτίνα! 🎵", comic_done:"Τα κατάφερα! 🏆",
        cap1:"Κάθε πρωί το ίδιο δράμα;", cap2:"Και κάθε βράδυ το ίδιο.",
-       cap3:"Με το Kidzlist η ρουτίνα γίνεται παιχνίδι.",
+       cap3:"Με το Kidslist η ρουτίνα γίνεται παιχνίδι.",
        cap4:"Μάζεψε, κατάφερε, καμάρωσε – χωρίς πίεση.",
        study_txt:"από 300.000+ οικογένειες λένε: με παιχνίδι η ρουτίνα πετυχαίνει καλύτερα.",
        study_src:"(η πηγή θα προστεθεί)", soon:"Σύντομα κοντά σας", stores:"App Store · Google Play" }
@@ -208,7 +208,7 @@ const AREAS=['a','b','c','d'];
 let L = ({el:'el',en:'en',de:'de'})[(navigator.language||'de').slice(0,2).toLowerCase()] || 'de';
 
 const LOGO_COLORS=['--pink','--blue','--green','--red','--orange','--yellow','--indigo','--magenta'];
-function logoHTML(){ return [...'kidzlist'].map((c,i)=>
+function logoHTML(){ return [...'kidslist'].map((c,i)=>
   `<span style="color:var(${LOGO_COLORS[i%8]})">${c}</span>`).join(''); }
 
 function panelHTML(p,idx){

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kidzlist – isometrische 3D-Fahrt (Konzept)</title>
+<title>Kidslist – isometrische 3D-Fahrt (Konzept)</title>
 <style>
   @font-face{font-family:'Fredoka';font-weight:700;font-display:swap;src:url('fredoka.woff2') format('woff2')}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -21,13 +21,13 @@
 <body>
 <div id="c"></div>
 <div class="hud">
-  <svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" aria-label="kidzlist">
+  <svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" aria-label="kidslist">
     <defs><style>.kdzwm{font-family:'Fredoka',sans-serif;font-weight:700;font-size:230px;letter-spacing:-14px;paint-order:stroke fill;stroke:#1B1B2F;stroke-width:10;stroke-linejoin:round}</style></defs>
-    <text class="kdzwm" text-anchor="middle" x="610" y="270" fill="#1B1B2F">kidzlist</text>
-    <text class="kdzwm" text-anchor="middle" x="600" y="260"><tspan fill="#FF3B30">k</tspan><tspan fill="#FF9500">i</tspan><tspan fill="#FFC72C">d</tspan><tspan fill="#2ECF6E">z</tspan><tspan fill="#2D7CF6">l</tspan><tspan fill="#5856D6">i</tspan><tspan fill="#AF52DE">s</tspan><tspan fill="#FF3D77">t</tspan></text>
+    <text class="kdzwm" text-anchor="middle" x="610" y="270" fill="#1B1B2F">kidslist</text>
+    <text class="kdzwm" text-anchor="middle" x="600" y="260"><tspan fill="#FF3B30">k</tspan><tspan fill="#FF9500">i</tspan><tspan fill="#FFC72C">d</tspan><tspan fill="#2ECF6E">s</tspan><tspan fill="#2D7CF6">l</tspan><tspan fill="#5856D6">i</tspan><tspan fill="#AF52DE">s</tspan><tspan fill="#FF3D77">t</tspan></text>
   </svg>
 </div>
-<div class="cap" id="cap"><b>Steig ein – wir fahren durch Kidzlist</b></div>
+<div class="cap" id="cap"><b>Steig ein – wir fahren durch Kidslist</b></div>
 <div class="scroll-hint">⌄</div>
 <div id="scroller"></div>
 
@@ -99,7 +99,7 @@ let curT=0,tgtT=0;
 function animate(){requestAnimationFrame(animate); curT+=(tgtT-curT)*0.1; setT(curT); rnd.render(scene,cam);}
 animate();
 
-const caps=[[0,"Steig ein – wir fahren durch Kidzlist"],[0.16,"Morgens & abends – Routine abhaken"],[0.34,"Logos sammeln & belohnen"],[0.52,"Vier Spiele zum Mitspielen"],[0.7,"33 Charaktere"],[0.88,"Sicher & fair – bald verfügbar"]];
+const caps=[[0,"Steig ein – wir fahren durch Kidslist"],[0.16,"Morgens & abends – Routine abhaken"],[0.34,"Logos sammeln & belohnen"],[0.52,"Vier Spiele zum Mitspielen"],[0.7,"33 Charaktere"],[0.88,"Sicher & fair – bald verfügbar"]];
 addEventListener('scroll',()=>{const max=document.getElementById('scroller').offsetHeight-innerHeight;tgtT=Math.max(0,Math.min(1,scrollY/max));
   let lab=caps[0][1]; for(const c of caps){if(tgtT>=c[0])lab=c[1];} document.getElementById('cap').querySelector('b').textContent=lab;});
 addEventListener('resize',()=>{W=innerWidth;H=innerHeight;aspect=W/H;cam.left=-D*aspect;cam.right=D*aspect;cam.top=D;cam.bottom=-D;cam.updateProjectionMatrix();rnd.setSize(W,H);});
