@@ -759,12 +759,12 @@ function wireBgm(){ if(audioCtx)return;
   try{ const AC=window.AudioContext||window.webkitAudioContext; if(!AC){bgm.volume=BGM_VOL;return;}
     audioCtx=new AC(); const src=audioCtx.createMediaElementSource(bgm); bgmGain=audioCtx.createGain(); bgmGain.gain.value=BGM_VOL; src.connect(bgmGain); bgmGain.connect(audioCtx.destination); bgm.volume=1;
   }catch(e){ bgm.volume=BGM_VOL; } }
-function playBgm(){ wireBgm(); if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(()=>{}); bgm.muted=false; bgm.play().then(()=>setSnd(true)).catch(()=>{}); }
+function ensureCtx(cb){ wireBgm(); if(audioCtx&&audioCtx.state!=='running'){ audioCtx.resume().then(cb).catch(cb); } else { cb(); } }   // erst Context aufwecken, DANN abspielen (sonst spielt iOS durch den schlafenden Context = kein Ton)
+function playBgm(){ ensureCtx(()=>{ bgm.muted=false; bgm.play().then(()=>setSnd(true)).catch(()=>{}); }); }
 sndBtn.onclick=function(){ if(bgm.paused){playBgm();}else{bgm.pause();setSnd(false);} };
-// iOS: Audio + Context bei der ALLERERSTEN Nutzer-Geste freischalten, sonst blockt der spaetere Auto-Start nach den Comics
+// erste Nutzer-Geste: Audio-Context schon aufwecken, damit der Auto-Start nach den Comics sofort spielt
 let bgmUnlocked=false;
-function unlockBgm(){ if(bgmUnlocked)return;bgmUnlocked=true; wireBgm(); if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});
-  bgm.muted=true; const p=bgm.play(); if(p&&p.then)p.then(()=>{if(!musikAuto){bgm.pause();bgm.currentTime=0;}bgm.muted=false;}).catch(()=>{bgm.muted=false;}); }
+function unlockBgm(){ if(bgmUnlocked)return;bgmUnlocked=true; ensureCtx(()=>{}); }
 ['touchstart','pointerdown','keydown'].forEach(ev=>addEventListener(ev,unlockBgm,{once:true,passive:true}));
 </script>
 </body>
