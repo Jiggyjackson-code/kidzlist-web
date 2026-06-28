@@ -156,9 +156,9 @@
   .lseq{position:relative;height:300px;aspect-ratio:500/1082;margin:.2rem auto .5rem;border-radius:1.1rem;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.25);border:5px solid #1B1B2F}
   .lsphoto{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0;transition:opacity .55s ease}
   .lsphoto.on{opacity:1}
-  .lscap{font-weight:700;font-size:1.02rem;height:2.7rem;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;opacity:0;transform:translateX(-45px)}   /* feste Hoehe: kein Springen; Text fliegt von links rein (Gerit) */
-  .lscap.in{animation:lcapin .55s cubic-bezier(.2,1,.3,1) forwards}
-  @keyframes lcapin{from{opacity:0;transform:translateX(-45px)}to{opacity:1;transform:none}}
+  .lscap{font-weight:700;font-size:1.02rem;height:2.7rem;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;opacity:0;transform:translateX(-90px)}   /* feste Hoehe: kein Springen; Text scrollt langsam von links rein (Gerit) */
+  .lscap.in{animation:lcapin 1.2s cubic-bezier(.2,.6,.25,1) forwards}
+  @keyframes lcapin{from{opacity:0;transform:translateX(-90px)}to{opacity:1;transform:none}}
   /* Routine-Demo */
   .rtblock{transition:opacity .5s,filter .5s}
   .rtblock+.rtblock{margin-top:.65rem;padding-top:.55rem;border-top:1.5px solid #eee}
@@ -549,7 +549,7 @@ function runLandSeq(){if(landSeqRun)return;landSeqRun=true;
   const ph=[...document.querySelectorAll('#lseq .lsphoto')],cap=document.getElementById('lscap');if(!ph.length)return;
   const steps=()=>[TT.ls1,TT.ls2,TT.ls3,TT.ls4];
   const show=i=>{ph.forEach((p,k)=>p.classList.toggle('on',k===i));cap.classList.remove('in');void cap.offsetWidth;cap.textContent=steps()[i];cap.classList.add('in');};
-  show(0);[1,2,3].forEach(i=>landTimers.push(setTimeout(()=>show(i),i*2000)));   // je 2s: schnelleres Umschalten (Gerit 2026-06-28)
+  show(0);[1,2,3].forEach(i=>landTimers.push(setTimeout(()=>show(i),i*2400)));   // je 2,4s: Zeit fuer das langsamere Text-Einscrollen (Gerit 2026-06-28)
 }
 function resetLandSeq(){landSeqRun=false;landTimers.forEach(clearTimeout);landTimers=[];
   document.querySelectorAll('#lseq .lsphoto').forEach((p,k)=>p.classList.toggle('on',k===0));
