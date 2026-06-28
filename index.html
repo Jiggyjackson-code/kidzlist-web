@@ -750,7 +750,7 @@ function konfBoom(){for(let i=0;i<130;i++){const k=document.createElement('div')
   k.style.left='50vw';k.style.top='52vh';k.style.background=KCOLS[i%7];k.style.setProperty('--tx',(Math.cos(ang)*dist)+'vw');k.style.setProperty('--ty',(Math.sin(ang)*dist)+'vh');
   k.style.animation=`boom ${1+Math.random()*0.9}s ease-out forwards`;document.body.appendChild(k);setTimeout(()=>k.remove(),2200);}}
 // Hintergrund-Musik aus der App (an/aus per Knopf; startet auf Klick wegen Autoplay-Regeln)
-const bgm=document.getElementById('bgm');bgm.volume=0.45;
+const bgm=document.getElementById('bgm');bgm.volume=0.22;   // halb so laut wie vorher (Gerit 2026-06-28)
 const sndBtn=document.getElementById('snd');
 function setSnd(an){const im=sndBtn.querySelector('img');if(im)im.src=IMG+'ui/'+(an?'lautsprecher':'lautsprecher_aus')+'.webp';}
 sndBtn.onclick=function(){if(bgm.paused){bgm.play().then(()=>setSnd(true)).catch(()=>{});}else{bgm.pause();setSnd(false);}};
