@@ -234,21 +234,32 @@
   .fcard p{font-size:.74rem;opacity:.74;line-height:1.28}
   @keyframes fmarch{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   /* ===== Comic im Last-War-Format: grosse Seite, gemischte Panels, Aufbau + Ken-Burns ===== */
-  .beat.clast{width:min(94%,410px);padding:.7rem .7rem .85rem;bottom:3.5vh}
+  .beat.clast{width:min(94%,410px);padding:.7rem .7rem .85rem;bottom:3.5vh;--clstep:2.5s}   /* Comic-Story-Tempo: Sekunden pro Panel (Bild -> Text -> naechstes Panel); Seite = 4 Panels ~10s */
+  /* Comic + Studien nutzen fast die volle Hoehe -- bis knapp unter die Sprach-Leiste (Gerit 2026-07-01) */
+  .beat.tall{top:5.5vh;bottom:3.5vh;display:flex;flex-direction:column}
+  .beat.tall .clpage{flex:1;min-height:0}
+  .beat.tall .studygrid{flex:1;min-height:0;justify-content:center}
   .clpage{display:flex;flex-direction:column}
   .clband{font-family:'Fredoka',sans-serif;font-weight:700;font-style:italic;text-align:center;line-height:1.2;background:var(--gelb);border:2.5px solid var(--tinte);border-radius:.7rem;padding:.4rem .6rem;font-size:1rem;box-shadow:0 3px 0 var(--tinte)}
   .clband.bot{margin-top:.5rem;background:#fff;font-size:.92rem}
-  .clgrid{display:grid;gap:.4rem;grid-template-columns:1fr 1fr;grid-template-rows:1.1fr 1fr 1.1fr;grid-template-areas:"a a" "b c" "d d";height:56vh;margin-top:.5rem}
+  .clgrid{display:grid;gap:.4rem;grid-template-columns:1fr 1fr;grid-template-rows:1.1fr 1fr 1.1fr;grid-template-areas:"a a" "b c" "d d";flex:1;min-height:0;margin-top:.5rem}
   .clpanel.area-a{grid-area:a}.clpanel.area-b{grid-area:b}.clpanel.area-c{grid-area:c}.clpanel.area-d{grid-area:d}
   .clpanel{position:relative;border:2.5px solid var(--tinte);border-radius:.6rem;overflow:hidden;display:grid;place-items:center;min-height:0;opacity:0;transform:scale(.84) rotate(-2deg) translateY(12px)}
-  .beat.on .clpanel{animation:clpop .7s cubic-bezier(.2,1.5,.4,1) forwards;animation-delay:calc(var(--i) * .55s)}
+  .beat.on .clpanel{animation:clpop .7s cubic-bezier(.2,1.5,.4,1) forwards;animation-delay:calc(var(--i) * var(--clstep))}
   .clpic{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
-  .beat.on .clpic{animation:clkb 9s ease-out forwards;animation-delay:calc((var(--i) * .55 + .7) * 1s)}
+  .climg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;transform-origin:center}
+  /* Justier-Modus (#fit) -- Autoren-Werkzeug: Bild pro Panel ziehen/zoomen, Werte exportieren */
+  body.fitmode .clpic{animation:none !important}   /* stabiles Bild, kein Ken-Burns beim Justieren */
+  body.fitmode .clpanel{cursor:move;outline:2px dashed rgba(255,255,255,.75);outline-offset:-2px;touch-action:none}
+  body.fitmode .clbub,body.fitmode .clband{opacity:.2}
+  #fitbox{position:fixed;left:8px;bottom:8px;z-index:99;background:rgba(27,27,47,.93);color:#fff;font:600 12px/1.45 ui-monospace,monospace;padding:8px 10px;border-radius:9px;max-width:94vw;word-break:break-all}
+  #fitbox button{margin-top:6px;font:inherit;background:#5856D6;color:#fff;border:none;border-radius:6px;padding:4px 9px;cursor:pointer}
+  .beat.on .clpic{animation:clkb 9s ease-out forwards;animation-delay:calc(var(--i) * var(--clstep) + .7s)}
   .clpanel.morn{background:linear-gradient(165deg,#a9d6ff,#ffe9b8)}
   .clpanel.night{background:linear-gradient(165deg,#3a4c84,#6c7fb8)}
   .clph{position:relative;z-index:1;font-size:2.7rem;filter:drop-shadow(0 3px 2px rgba(0,0,0,.18));opacity:.92}
   .clbub{position:absolute;z-index:2;max-width:90%;font-weight:700;font-size:.72rem;line-height:1.18;background:#fff;color:var(--tinte);border:2px solid var(--tinte);border-radius:.55rem;padding:.26rem .44rem;box-shadow:0 2px 0 rgba(27,27,47,.5);opacity:0;transform:scale(.6)}
-  .beat.on .clbub{animation:clbub .42s cubic-bezier(.2,1.7,.4,1) forwards;animation-delay:calc((var(--i) * .55 + .65) * 1s)}
+  .beat.on .clbub{animation:clbub .42s cubic-bezier(.2,1.7,.4,1) forwards;animation-delay:calc(var(--i) * var(--clstep) + 1.2s)}
   .clbub.tl{top:.3rem;left:.3rem}
   .clbub.br{right:.3rem;bottom:.3rem;background:var(--gelb)}
   .clbub.shout{background:var(--rosa);color:#fff;border-color:#a82018}
@@ -411,7 +422,7 @@ const T={
 // Zusatz-Texte fuer den Umbau 2026-06-28 (Kopf, Landschafts-Sequenz, Buendelung, Spiele, Sicher&Fair, Ziel)
 const EXTRA={
  de:{study_txt:"Sterne sammeln motiviert – Belohnungssysteme werden von Kinderärzten empfohlen.",study_src:"American Academy of Pediatrics (AAP)",
-   hud_sub:"Routine für Kinder – mit Belohnung & Spaß",
+   hud_sub:"Morgens & abends selbstständig",
    ls1:"Tagsüber hell und freundlich",ls2:"Nachts mit schönem Sternenhimmel",
    ls3:"Mit wechselnden Mondphasen und Sternzeichen",ls4:"Jeden Monat eine neue Welt",
    rt_intro_m:"Tipp die Aufgaben an – ganz allein.",rt_intro_e:"Und abends genauso – Schritt für Schritt.",
@@ -422,7 +433,7 @@ const EXTRA={
    safe1:"Keine Werbung",safe2:"Kein Tracking",safe3:"Daten bleiben auf dem Gerät",safe4:"Eltern-Code",safe5:"Kostenlos nutzbar",
    ziel_p:"Kostenlos. Ohne Werbung, ohne Tracking."},
  en:{study_txt:"Collecting stars motivates kids – reward systems are recommended by pediatricians.",study_src:"American Academy of Pediatrics (AAP)",
-   hud_sub:"Routine for kids – with rewards & fun",
+   hud_sub:"Morning & evening, on their own",
    ls1:"Bright and friendly by day",ls2:"A beautiful starry sky at night",
    ls3:"With changing moon phases and star signs",ls4:"A new world every month",
    rt_intro_m:"Tap the tasks – all by yourself.",rt_intro_e:"And the same in the evening – step by step.",
@@ -433,7 +444,7 @@ const EXTRA={
    safe1:"No ads",safe2:"No tracking",safe3:"Data stays on the device",safe4:"Parental code",safe5:"Free to use",
    ziel_p:"Free. No ads, no tracking."},
  gr:{study_txt:"Η συλλογή αστεριών παρακινεί – τα συστήματα επιβράβευσης συνιστώνται από παιδιάτρους.",study_src:"American Academy of Pediatrics (AAP)",
-   hud_sub:"Ρουτίνα για παιδιά – με επιβράβευση & κέφι",
+   hud_sub:"Πρωί & βράδυ, μόνα τους",
    ls1:"Φωτεινό και χαρούμενο τη μέρα",ls2:"Όμορφος έναστρος ουρανός τη νύχτα",
    ls3:"Με εναλλασσόμενες φάσεις φεγγαριού και ζώδια",ls4:"Κάθε μήνα ένας νέος κόσμος",
    rt_intro_m:"Πάτα τις δουλειές – εντελώς μόνος σου.",rt_intro_e:"Και το βράδυ το ίδιο – βήμα βήμα.",
@@ -515,7 +526,7 @@ let L=pickLang();
 let TT=T[L];
 function makeBeats(t){return[
  {pos:'mid',clast:1,html:`<div class="clpage"><div class="clband">${t.cap1}</div><div class="clgrid"><div class="clpanel morn area-a" data-img="comic/morgen-problem-1" style="--i:0"><div class="clpic"></div><span class="clph">🛏️</span><div class="clbub tl">${t.comic_wake}</div></div><div class="clpanel morn area-b" data-img="comic/morgen-problem-2" style="--i:1"><div class="clpic"></div><span class="clph">🙅</span><div class="clbub br shout">${t.comic_no}</div></div><div class="clpanel night area-c" data-img="comic/abend-problem-1" style="--i:2"><div class="clpic"></div><span class="clph">🧸</span><div class="clbub tl">${t.comic_sleep}</div></div><div class="clpanel night area-d" data-img="comic/abend-problem-2" style="--i:3"><div class="clpic"></div><span class="clph">😫</span><div class="clbub br shout">${t.comic_more}</div></div></div><div class="clband bot">${t.cap2}</div></div>`},
- {pos:'mid',html:`<div class="studygrid"><h3 class="studygh prob">${t.studygh1}</h3><div class="studycard sc1"><div class="snum">60%</div><div class="stxt"><p>${t.study1}</p><div class="ssrc">${t.study1s}</div></div></div><div class="studycard sc2"><div class="snum">27%</div><div class="stxt"><p>${t.study2}</p><div class="ssrc">${t.study2s}</div></div></div><h3 class="studygh sol">${t.studygh2}</h3><div class="studycard sc3"><div class="snum">⭐</div><div class="stxt"><p>${t.study3}</p><div class="ssrc">${t.study3s}</div></div></div></div><div class="weiter">⌄</div>`},
+ {pos:'mid',study:1,html:`<div class="studygrid"><h3 class="studygh prob">${t.studygh1}</h3><div class="studycard sc1"><div class="snum">60%</div><div class="stxt"><p>${t.study1}</p><div class="ssrc">${t.study1s}</div></div></div><div class="studycard sc2"><div class="snum">27%</div><div class="stxt"><p>${t.study2}</p><div class="ssrc">${t.study2s}</div></div></div><h3 class="studygh sol">${t.studygh2}</h3><div class="studycard sc3"><div class="snum">⭐</div><div class="stxt"><p>${t.study3}</p><div class="ssrc">${t.study3s}</div></div></div></div><div class="weiter">⌄</div>`},
  {pos:'mid',clast:1,html:`<div class="clpage"><div class="clband">${t.cap3}</div><div class="clgrid"><div class="clpanel morn area-a" data-img="comic/morgen-app-1" style="--i:0"><div class="clpic"></div><span class="clph">📱</span><div class="clbub tl">${t.comic_morningroutine}</div></div><div class="clpanel morn area-b" data-img="comic/morgen-app-2" style="--i:1"><div class="clpic"></div><span class="clph">⭐</span><div class="clbub br">${t.comic_logo}</div></div><div class="clpanel night area-c" data-img="comic/abend-app-1" style="--i:2"><div class="clpic"></div><span class="clph">🌙</span><div class="clbub tl">${t.comic_routine}</div></div><div class="clpanel night area-d" data-img="comic/abend-app-2" style="--i:3"><div class="clpic"></div><span class="clph">🏆</span><div class="clbub br">${t.comic_done}</div></div></div><div class="clband bot">${t.cap4}</div></div>`},
  {pos:'mid',html:`${LOGO}<p class="sub">${t.intro_sub}</p>${STORES}<div class="weiter">${t.intro_w}</div>`},
  {pos:'mid',html:`<h2>${t.chars_h}</h2><p class="sub">${t.chars_sub}</p><div class="chwrap"><div class="chrow2 r" id="chrowA"></div><div class="chrow2 l" id="chrowB"></div></div>`},
@@ -528,7 +539,7 @@ function makeBeats(t){return[
 const BEATS=makeBeats(TT);
 
 const ov=document.getElementById('ov');
-BEATS.forEach((b,i)=>{const d=document.createElement('div');d.className='beat pos-'+b.pos+(b.clast?' clast':'')+(b.landseq?' lnar':'')+(b.safe?' safebeat':'');d.id='b'+i;d.innerHTML=b.html;ov.appendChild(d);b.el=d;});
+BEATS.forEach((b,i)=>{const d=document.createElement('div');d.className='beat pos-'+b.pos+(b.clast?' clast tall':'')+(b.study?' tall':'')+(b.landseq?' lnar':'')+(b.safe?' safebeat':'');d.id='b'+i;d.innerHTML=b.html;ov.appendChild(d);b.el=d;});
 // Abstaende grosszuegig verteilen (Landschaft laenger, Spiele klar getrennt -> kein Ueberlappen)
 // 10 Beats, grosszuegig verteilt -> mehr sichtbare Fahrt dazwischen (entspannte Reise, Gerit 2026-06-28)
 [0,0.10,0.20,0.30,0.40,0.50,0.61,0.71,0.81,0.91].forEach((a,i)=>{if(BEATS[i])BEATS[i].at=a;});
@@ -540,7 +551,9 @@ function fillRoutine(boxId,tasks){const box=document.getElementById(boxId);if(!b
 const CHARS=["unicorn","princess","Fee","mermaid","Drache","Schmetterling","hero","Roboter","ritter","pirat","ninja","samurai","aerztin","astronautin","pilot","polizist","feuerwehr","saengerin"];
 function fillChars(){['chrowA','chrowB'].forEach((id,ri)=>{const el=document.getElementById(id);if(!el)return;const arr=CHARS.slice(ri*9,ri*9+9);const h=arr.map(c=>`<img src="${IMG}chars/${c}.webp" loading="lazy" alt="">`).join('');el.innerHTML=h+h;});}
 function applyPopup(){const s=(id,v,html)=>{const e=document.getElementById(id);if(e){if(html)e.innerHTML=v;else e.textContent=v;}};s('wbald',TT.bald);s('wzielp',TT.ziel_p,1);s('wds',TT.ds);s('cta',TT.cta);s('hudsub',TT.hud_sub);s('hudcta',TT.cta);}
-function loadComic(){document.querySelectorAll('.clpanel[data-img]').forEach(p=>{const name=p.getAttribute('data-img');const im=new Image();im.onload=()=>{const pic=p.querySelector('.clpic');if(pic)pic.style.backgroundImage="url('"+IMG+name+".webp')";const ph=p.querySelector('.clph');if(ph)ph.style.display='none';};im.src=IMG+name+'.webp';});}   // echte Comic-Bilder laden, sobald vorhanden; bis dahin Emoji-Platzhalter
+const PANEL_FIT={};   // pro Panel-Name {z,x,y}: festgebrannte Zoom/Position (via #fit justiert), sonst Vollbild
+function applyFit(img,name){const f=PANEL_FIT[name];img.style.transform=f?('translate('+(f.x||0)+'%,'+(f.y||0)+'%) scale('+(f.z||1)+')'):'';}
+function loadComic(){document.querySelectorAll('.clpanel[data-img]').forEach(p=>{const name=p.getAttribute('data-img');const pic=p.querySelector('.clpic');if(!pic)return;let img=pic.querySelector('img.climg');if(!img){img=document.createElement('img');img.className='climg';img.alt='';pic.appendChild(img);}const im=new Image();im.onload=()=>{img.src=im.src;applyFit(img,name);const ph=p.querySelector('.clph');if(ph)ph.style.display='none';};im.src=IMG+name+'.webp';});}   // echte Comic-Bilder laden, sobald vorhanden; bis dahin Emoji-Platzhalter
 function renderDynamic(){fillRoutine('rtMorgen',TT.morning);fillRoutine('rtAbend',TT.evening);fillChars();fillGames4();applyPopup();loadComic();}
 
 // ===== Landschafts-Sequenz (Auto): Juni Tag -> Juni Nacht -> Dez Nacht -> Dez Tag, mit einfahrendem Text =====
@@ -645,7 +658,7 @@ function updateBeats(t){
   for(const b of BEATS){if(!b.game)continue;
     if(b===bg&&bd<0.013&&!b.won){if(!b.live){b.live=true;b.clean=GAMES[b.game](b.el.querySelector('.gstage'),IMG+b.img+'.webp',b.el.querySelector('.gmsg'),b);}}
     else if(b.live){b.live=false;if(b.clean){b.clean();b.clean=null;}const gm=b.el.querySelector('.gmsg');if(gm)gm.textContent='';}}
-  document.getElementById('hud').classList.toggle('on',t<0.95);   // kidslist-Kopf durchgehend, auch beim ersten Comic (Gerit 2026-06-28)
+  document.getElementById('hud').classList.toggle('on', t>=0.38 && t<0.95);   // Kopf erst ab Beat 4 "Jedes Kind ein Profil" (at 0.40) einblenden (Gerit 2026-07-01)
   document.getElementById('hint').style.opacity=(t>0.92||curBeat>=NB-2)?'0':'.45';
   document.getElementById('prog').style.transform='scaleX('+t+')';
 }
@@ -757,6 +770,36 @@ const sndBtn=document.getElementById('snd');
 function setSnd(an){const im=sndBtn.querySelector('img');if(im)im.src=IMG+'ui/'+(an?'lautsprecher':'lautsprecher_aus')+'.webp';}
 function playBgm(){ bgm.play().then(()=>setSnd(true)).catch(()=>{}); }   // spielt in der Wisch-Geste; respektiert den Stumm-Schalter
 sndBtn.onclick=function(){ if(bgm.paused){playBgm();}else{bgm.pause();setSnd(false);} };
+
+// ===== Comic-Bild-Justierung (#fit) -- Autoren-Werkzeug, auf der normalen Seite inaktiv =====
+if(location.hash.toLowerCase().indexOf('fit')>=0){
+  document.body.classList.add('fitmode');
+  var FITLIVE={};
+  function gf(n){ return FITLIVE[n]||(FITLIVE[n]={z:1,x:0,y:0}); }
+  var fbox=document.createElement('div'); fbox.id='fitbox';
+  var flabel=document.createElement('div'); flabel.textContent='Justier-Modus: Bild ziehen = verschieben, Mausrad = zoomen. Panel fuer Panel.';
+  var fbtn=document.createElement('button'); fbtn.textContent='Werte kopieren';
+  fbox.appendChild(flabel); fbox.appendChild(fbtn); document.body.appendChild(fbox);
+  function fshow(n){ var f=gf(n); flabel.textContent=n+'  |  zoom '+f.z.toFixed(2)+'  x '+f.x.toFixed(1)+'  y '+f.y.toFixed(1); }
+  function fapply(img,n){ var f=gf(n); img.style.transform='translate('+f.x+'%,'+f.y+'%) scale('+f.z+')'; }
+  fbtn.onclick=function(){
+    var o={}; for(var k in FITLIVE){ var f=FITLIVE[k]; if(f.z!==1||f.x||f.y) o[k]={z:+f.z.toFixed(3),x:+f.x.toFixed(1),y:+f.y.toFixed(1)}; }
+    var s=JSON.stringify(o); flabel.textContent=s; if(navigator.clipboard){ navigator.clipboard.writeText(s).catch(function(){}); }
+  };
+  function fwire(){
+    document.querySelectorAll('.clpanel[data-img]').forEach(function(p){
+      if(p._fit) return; var img=p.querySelector('img.climg'); if(!img) return; p._fit=1;
+      var n=p.getAttribute('data-img'), dr=false, sx=0, sy=0, bx=0, by=0;
+      p.addEventListener('pointerdown',function(e){ dr=true; sx=e.clientX; sy=e.clientY; var f=gf(n); bx=f.x; by=f.y; try{ p.setPointerCapture(e.pointerId); }catch(_e){} e.stopPropagation(); });
+      p.addEventListener('pointermove',function(e){ if(!dr) return; var f=gf(n), r=p.getBoundingClientRect(); f.x=bx+(e.clientX-sx)/r.width*100; f.y=by+(e.clientY-sy)/r.height*100; fapply(img,n); fshow(n); e.stopPropagation(); });
+      function fend(e){ dr=false; if(e){ e.stopPropagation(); } }
+      p.addEventListener('pointerup',fend); p.addEventListener('pointercancel',fend);
+      p.addEventListener('wheel',function(e){ e.preventDefault(); e.stopPropagation(); var f=gf(n); f.z=Math.max(1,Math.min(3.5, f.z*(1-e.deltaY*0.0015))); fapply(img,n); fshow(n); },{passive:false});
+      fapply(img,n);
+    });
+  }
+  setInterval(fwire,500);
+}
 </script>
 </body>
 </html>
